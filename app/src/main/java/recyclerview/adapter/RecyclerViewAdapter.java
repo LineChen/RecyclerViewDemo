@@ -46,11 +46,11 @@ public abstract class RecyclerViewAdapter<T extends RecyclerViewAdapter.Item> ex
         }
     }
 
-    public int getHeaderView() {
+    public int getHeaderViewRes() {
         return headerViewRes;
     }
 
-    public int getFooterView() {
+    public int getFooterViewRes() {
         return footerViewRes;
     }
 
@@ -134,10 +134,10 @@ public abstract class RecyclerViewAdapter<T extends RecyclerViewAdapter.Item> ex
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (hasHeader() && viewType == Item.TYPE_HEADER) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(getHeaderView(), parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(getHeaderViewRes(), parent, false);
             return new HeaderViewHolder(v);
         } else if (hasFooter() && viewType == Item.TYPE_FOOTER) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(getFooterView(), parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(getFooterViewRes(), parent, false);
             return new FooterViewHolder(v);
         } else {
             return onCreateHolder(parent, viewType);

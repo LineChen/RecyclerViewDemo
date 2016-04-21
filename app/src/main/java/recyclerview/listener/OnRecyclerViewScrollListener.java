@@ -27,7 +27,9 @@ public abstract class OnRecyclerViewScrollListener<T extends RecyclerViewAdapter
 
 
     private int[] lastPositions;
+    /**最后一个可见的位置**/
     private int lastVisibleItemPosition;
+    /**当前滚动状态**/
     private int currentScrollState = 0;
 
     @Override
@@ -76,7 +78,7 @@ public abstract class OnRecyclerViewScrollListener<T extends RecyclerViewAdapter
         int totalItemCount = layoutManager.getItemCount();
         if (visibleItemCount > 0 && currentScrollState == RecyclerView.SCROLL_STATE_IDLE
                 && lastVisibleItemPosition >= totalItemCount - 1) {
-            if (!isLoadingMore()){
+            if (! mIsLoadingMore){
                 mIsLoadingMore =true;
                 onStart();
                 onLoadMore();

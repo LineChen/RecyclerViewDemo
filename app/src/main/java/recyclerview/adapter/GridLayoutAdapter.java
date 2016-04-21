@@ -34,6 +34,8 @@ public abstract class GridLayoutAdapter<T extends RecyclerViewAdapter.Item> exte
     }
 
     class GridSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
+
+        //如果是header 或 footer就需要占满整个屏幕
         @Override
         public int getSpanSize(int position) {
             if (isHeader(position) || isFooter(position)) {
