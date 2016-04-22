@@ -10,62 +10,48 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+/**
+ * Created by chenliu on 2016/4/22.<br/>
+ * 描述：基础通用适配器->支持LinearLayoutManager， 添加 header、footer<br/>
+ * 支持多布局
+ */
 public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
 
-    public interface Item {
+    public interface ItemType {
         int TYPE_HEADER = 0;
         int TYPE_FOOTER = 1;
-        /**
-         * 返回item类型，其值不能为0或者1；
-         *
-         * @return
-         */
-        int getType();
+        int TYPE_ONLY_ONE = 2;
     }
 
-
     protected Context mContext;
-    protected int mLayoutId;
     protected List<T> mDatas;
     protected LayoutInflater mInflater;
 
     private OnItemClickListener mOnItemClickListener;
 
-
-    //-------添加header、footer处理
+    //-------添加header、footer处理-------
     protected int headerViewRes;
     protected int footerViewRes;
     protected boolean hasHeader = false;
     protected boolean hasFooter = false;
 
+    //----支持多布局处理---
+    protected ItemSupport<T> mMultiItemTypeSupport;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
 
-    public CommonAdapter(Context context, int layoutId, List<T> datas) {
+    public CommonAdapter(Context context, List<T> datas, ItemSupport<T> multiItemTypeSupport) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mLayoutId = layoutId;
         mDatas = datas;
+        mMultiItemTypeSupport = multiItemTypeSupport;
+
+        if (mMultiItemTypeSupport == null)
+            throw new IllegalArgumentException("the mMultiItemTypeSupport can not be null.");
     }
 
-    public CommonAdapter(Context context, int layoutId, List<T> datas, int headerViewRes) {
-        mContext = context;
-        mInflater = LayoutInflater.from(context);
-        mLayoutId = layoutId;
-        mDatas = datas;
-        setHeaderView(headerViewRes);
-    }
-
-    public CommonAdapter(Context context, int layoutId, List<T> datas, int headerViewRes, int footerViewRes) {
-        mContext = context;
-        mInflater = LayoutInflater.from(context);
-        mLayoutId = layoutId;
-        mDatas = datas;
-        setHeaderView(headerViewRes);
-        setFooterView(footerViewRes);
-    }
 
     public boolean isHeader(int position) {
         return hasHeader() && position == 0;
@@ -152,27 +138,27 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = null;//ViewHolder.get(mContext, null, parent, mLayoutId, -1);
-        if (hasHeader() && viewType == Item.TYPE_HEADER) {
-            viewHolder = ViewHolder.get(mContext, null, parent, headerViewRes, -1);
-            Log.e("===", "create header holder");
-        } else if (hasFooter() && viewType == Item.TYPE_FOOTER) {
-            viewHolder = ViewHolder.get(mContext, null, parent, footerViewRes, -1);
-            Log.e("===", "create footer holder");
-        } else {
-            viewHolder = ViewHolder.get(mContext, null, parent, mLayoutId, -1);
-            setListener(parent, viewHolder, viewType);
+        ViewHolder viewHolder = null;
+        if(mMultiItemTypeSupport != null){
+            if (hasHeader() && viewType == ItemType.TYPE_HEADER) {
+                viewHolder = ViewHolder.get(mContext, null, parent, headerViewRes, -1);
+            } else if (hasFooter() && viewType == ItemType.TYPE_FOOTER) {
+                viewHolder = ViewHolder.get(mContext, null, parent, footerViewRes, -1);
+            } else {
+                int layoutId = mMultiItemTypeSupport.getLayoutId(viewType);
+                viewHolder = ViewHolder.get(mContext, null, parent, layoutId, -1);
+                setListener(parent, viewHolder, viewType);
+            }
         }
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.updatePosition(position);
-        if (getItemViewType(position) == Item.TYPE_HEADER) {
+        if (getItemViewType(position) == ItemType.TYPE_HEADER) {
             bindHeaderView(holder);
-        } else if (getItemViewType(position) == Item.TYPE_FOOTER) {
+        } else if (getItemViewType(position) == ItemType.TYPE_FOOTER) {
             bindFooterView(holder);
         } else {
             bindItemView(holder, mDatas.get(position - getHeaderCount()));
@@ -195,22 +181,30 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     //这里只考虑是否是头部或底部
     @Override
     public int getItemViewType(int position) {
-        int size = mDatas.size();
-        int type = -1;
-        if (hasHeader()) {
-            if (position == 0) {
-                type =  Item.TYPE_HEADER;
+        int itemType = -1;
+        if (mMultiItemTypeSupport != null){
+            int size = mDatas.size();
+            if (hasHeader()) {
+                if (position == 0) {
+                    itemType =  ItemType.TYPE_HEADER;
+                } else {
+                    if (position == size + 1) {
+                        itemType =  ItemType.TYPE_FOOTER;
+                    } else{
+                        itemType =  mMultiItemTypeSupport.getItemViewType(position - getHeaderCount(), mDatas.get(position - getHeaderCount()));
+                    }
+                }
             } else {
-                if (position == size + 1) {
-                    type =  Item.TYPE_FOOTER;
+                if (position == size) {
+                    itemType =  ItemType.TYPE_FOOTER;
+                } else {
+                    itemType =  mMultiItemTypeSupport.getItemViewType(position, mDatas.get(position));
                 }
             }
         } else {
-            if (position == size) {
-                type =  Item.TYPE_FOOTER;
-            }
+            itemType = super.getItemViewType(position);
         }
-        return type;
+        return itemType;
     }
 
     protected int getPosition(RecyclerView.ViewHolder viewHolder) {
@@ -220,7 +214,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     protected T getItemByPosition(int position) {
         int size = mDatas.size();
         if (hasHeader()) {
-            return mDatas.get(position - 1);
+            return mDatas.get(position - getHeaderCount());
         } else {
             return mDatas.get(position);
         }
@@ -245,7 +239,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
             {
                 if (mOnItemClickListener != null) {
                     int position = getPosition(viewHolder);
-                    mOnItemClickListener.onItemClick(parent, v, mDatas.get(position - getHeaderCount()), position);
+                    mOnItemClickListener.onItemClick(parent, v, mDatas.get(position - getHeaderCount()), position- getHeaderCount());
                 }
             }
         });
@@ -258,7 +252,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
             {
                 if (mOnItemClickListener != null) {
                     int position = getPosition(viewHolder);
-                    return mOnItemClickListener.onItemLongClick(parent, v, mDatas.get(position - getHeaderCount()), position);
+                    return mOnItemClickListener.onItemLongClick(parent, v, mDatas.get(position - getHeaderCount()), position- getHeaderCount());
                 }
                 return false;
             }
@@ -266,7 +260,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     }
 
     //绑定数据
-    public abstract void bindItemView(ViewHolder holder, T t);
+    protected abstract void bindItemView(ViewHolder holder, T t);
 
     //------这两个方法不是必须的，所以父类写个空方法
     protected  void bindFooterView(ViewHolder holder){
