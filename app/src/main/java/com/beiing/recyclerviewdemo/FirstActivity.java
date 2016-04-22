@@ -1,95 +1,79 @@
 package com.beiing.recyclerviewdemo;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.beiing.recyclerviewdemo.adapter.MainAdapter;
+import com.beiing.recyclerview_adapter.DividerItemDecoration;
+import com.beiing.recyclerview_adapter.OnItemClickListener;
+import com.beiing.recyclerview_adapter.OnRecyclerViewScrollListener;
+import com.beiing.recyclerviewdemo.adapter.FirstAdapter;
 import com.beiing.recyclerviewdemo.bean.Content;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import recyclerview.adapter.RecyclerViewAdapter;
-import recyclerview.listener.OnRecyclerViewScrollListener;
 
-public class MainActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
+public class FirstActivity extends AppCompatActivity {
+
+    RecyclerView recyclerView;
     private List<Content> list = new ArrayList<Content>();
-    private RecyclerViewAdapter<Content> myAdapter;
-    private  ArrayList<Content> arrayList;
-    Handler mHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            List<Content> list= (List<Content>) msg.obj;
-            myAdapter.getList().addAll(list);
-            myAdapter.notifyDataSetChanged();
-            myAdapter.setFooterView(0);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-
+        setContentView(R.layout.activity_first);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         initData();
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        final FirstAdapter adapter = new FirstAdapter(this, list);
+        adapter.setHeaderView(R.layout.item_header);
 
 
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        //mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        myAdapter = new MainAdapter(list,R.layout.item_header);
-//        myAdapter.setHeaderView(R.layout.item_header);
-        //myAdapter.setFooterView(R.layout.item_footer);
-        mRecyclerView.setAdapter(myAdapter);
+        recyclerView.setAdapter(adapter);
 
-        arrayList=new ArrayList<Content>(myAdapter.getList());
-        mRecyclerView.addOnScrollListener(new OnRecyclerViewScrollListener<Content>(){
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        adapter.setOnItemClickListener(new OnItemClickListener<Content>() {
+            @Override
+            public void onItemClick(ViewGroup parent, View view, Content content, int position) {
+                Toast.makeText(FirstActivity.this, position + content.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public boolean onItemLongClick(ViewGroup parent, View view, Content content, int position) {
+                Toast.makeText(FirstActivity.this, position + content.getTitle(), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        recyclerView.addOnScrollListener(new OnRecyclerViewScrollListener<Content>() {
             @Override
             public void onStart() {
-                myAdapter.setFooterView(R.layout.item_footer);
-                if (myAdapter.hasHeader()){
-                    mRecyclerView.smoothScrollToPosition(myAdapter.getItemCount()+1);
-                }else{
-                    mRecyclerView.smoothScrollToPosition(myAdapter.getItemCount());
-                }
+                adapter.setFooterView(R.layout.item_footer);
+                Log.e("====", "item_count:" + adapter.getItemCount());
+                recyclerView.smoothScrollToPosition(adapter.getItemCount());
             }
 
             @Override
             public void onLoadMore() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Log.e("TAG","模拟网络请求数据");
-                            Thread.sleep(5000);
-                            //手动调用onFinish()
-                            onFinish(arrayList);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-            }
-
-            @Override
-            public void onFinish(List<Content> contents) {
-                Message message=Message.obtain();
-                message.obj=contents;
-                mHandler.sendMessage(message);
-                setLoadingMore(false);
+                    Log.e("===", "onLoadMore");
             }
         });
 
+        Log.e("====", "hasFooter:" + adapter.hasFooter());
     }
 
+
+    //5个数据
     private void initData() {
         Content c = new Content();
         c.setIconUrl("http://p1.qqyou.com/pic/uploadpic/2013-5/26/2013052611174240620.jpg");

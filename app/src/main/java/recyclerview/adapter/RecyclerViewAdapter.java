@@ -146,9 +146,14 @@ public abstract class RecyclerViewAdapter<T extends RecyclerViewAdapter.Item> ex
 
     public abstract RecyclerView.ViewHolder onCreateHolder(ViewGroup parent, int viewType);
 
-    protected abstract void onBindHeaderView(View headerView);
+    //------这两个方法不是必须的，所以父类写个空方法
+    protected  void onBindHeaderView(View headerView){
 
-    protected abstract void onBindFooterView(View footerView);
+    }
+
+    protected  void onBindFooterView(View footerView){
+
+    }
 
     protected abstract void onBindItemView(RecyclerView.ViewHolder holder, T item);
 
@@ -167,13 +172,8 @@ public abstract class RecyclerViewAdapter<T extends RecyclerViewAdapter.Item> ex
         } else {
             T i = getItemByPosition(position);
             onBindItemView(holder, i);
-
         }
-
-
     }
-
-
 
     protected T getItemByPosition(int position) {
         int size = list.size();
@@ -209,7 +209,6 @@ public abstract class RecyclerViewAdapter<T extends RecyclerViewAdapter.Item> ex
                     return list.get(position - 1).getType();
                 }
             }
-
         } else {
             if (position == size) {
                 return Item.TYPE_FOOTER;

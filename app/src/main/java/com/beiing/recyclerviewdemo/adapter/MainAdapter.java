@@ -16,19 +16,18 @@ import java.util.List;
 
 import recyclerview.adapter.StaggeredGridLayoutAdapter;
 
-public class MyAdapter extends StaggeredGridLayoutAdapter<Content> {
+public class MainAdapter extends StaggeredGridLayoutAdapter<Content> {
 
 
-    public MyAdapter(List<Content> list, int headerViewRes) {
+    public MainAdapter(List<Content> list, int headerViewRes) {
         super(list, headerViewRes);
     }
 
-
-    public MyAdapter(List<Content> list) {
+    public MainAdapter(List<Content> list) {
         super(list);
     }
 
-    public MyAdapter(List<Content> list, int headerViewRes, int footerViewRes) {
+    public MainAdapter(List<Content> list, int headerViewRes, int footerViewRes) {
         super(list, headerViewRes, footerViewRes);
     }
 
@@ -42,7 +41,7 @@ public class MyAdapter extends StaggeredGridLayoutAdapter<Content> {
     protected void onBindHeaderView(View headerView) {
         Log.e("TAG","这是HeadView数据绑定的过程");
         ImageView imageView= (ImageView) headerView.findViewById(R.id.icon);
-        Picasso.with(headerView.getContext()).load("http://p1.qqyou.com/pic/uploadpic/2013-5/26/2013052611174240620.jpg").into(imageView);
+        imageView.setImageResource(R.mipmap.ic_launcher);
     }
 
     @Override
