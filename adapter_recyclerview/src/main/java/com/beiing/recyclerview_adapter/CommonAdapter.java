@@ -52,6 +52,10 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
             throw new IllegalArgumentException("the mMultiItemTypeSupport can not be null.");
     }
 
+    public List<T> getDatas(){
+        return mDatas;
+    }
+
 
     public boolean isHeader(int position) {
         return hasHeader() && position == 0;

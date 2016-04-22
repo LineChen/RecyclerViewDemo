@@ -1,5 +1,7 @@
 package com.beiing.recyclerviewdemo;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,6 +28,18 @@ public class FirstActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     private List<Content> list = new ArrayList<Content>();
+    FirstAdapter adapter;
+    Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            List<Content> list= (List<Content>) msg.obj;
+            adapter.getDatas().addAll(list);
+            adapter.notifyDataSetChanged();
+            adapter.setFooterView(0);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +49,8 @@ public class FirstActivity extends AppCompatActivity {
         initData();
 //        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final FirstAdapter adapter = new FirstAdapter(this, list);
+        adapter = new FirstAdapter(this, list);
         adapter.setHeaderView(R.layout.item_header);
-
 
         recyclerView.setAdapter(adapter);
 
@@ -65,7 +78,22 @@ public class FirstActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                    Log.e("===", "onLoadMore");
+                Log.e("===", "onLoadMore");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Log.e("TAG","模拟网络请求数据");
+                            Thread.sleep(5000);
+                            Message message = Message.obtain();
+                            message.obj = list;
+                            mHandler.sendMessage(message);
+                            setLoadingMore(false);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
         });
 
@@ -73,7 +101,6 @@ public class FirstActivity extends AppCompatActivity {
     }
 
 
-    //5个数据
     private void initData() {
         Content c = new Content();
         c.setIconUrl("http://p1.qqyou.com/pic/uploadpic/2013-5/26/2013052611174240620.jpg");

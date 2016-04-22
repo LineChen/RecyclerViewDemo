@@ -22,4 +22,11 @@ public class ControlActivity extends AppCompatActivity {
     }
 
 
+    public void goGridLayoutActivity(View view) {
+        startActivity(new Intent(this, GridLayoutActivity.class));
+    }
+
+    public void goStaggerActivity(View view) {
+        startActivity(new Intent(this, StaggerActivity.class));
+    }
 }
