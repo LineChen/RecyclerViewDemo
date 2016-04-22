@@ -23,6 +23,7 @@ public class MyAdapter extends StaggeredGridLayoutAdapter<Content> {
         super(list, headerViewRes);
     }
 
+
     public MyAdapter(List<Content> list) {
         super(list);
     }
