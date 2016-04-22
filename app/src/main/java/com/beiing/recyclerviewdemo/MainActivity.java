@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
-import com.beiing.recyclerviewdemo.adapter.MyAdapter;
+import com.beiing.recyclerviewdemo.adapter.MainAdapter;
 import com.beiing.recyclerviewdemo.bean.Content;
 
 import java.util.ArrayList;
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         //mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        myAdapter = new MyAdapter(list);
-        //myAdapter.setHeaderView(R.layout.item_header);
+        myAdapter = new MainAdapter(list,R.layout.item_header);
+//        myAdapter.setHeaderView(R.layout.item_header);
         //myAdapter.setFooterView(R.layout.item_footer);
         mRecyclerView.setAdapter(myAdapter);
 
