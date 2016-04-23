@@ -77,26 +77,18 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
         return footerViewRes;
     }
 
+
     public void setHeaderView(int headerViewRes) {
-
-        if (headerViewRes != 0) {
-            if (!hasHeader()){
-                this.headerViewRes = headerViewRes;
-                this.hasHeader = true;
-                notifyItemInserted(0);
-            }else{
-                this.headerViewRes = headerViewRes;
-                notifyDataSetChanged();
-            }
-
-        } else {
-            if (hasHeader()){
-                this.hasHeader = false;
-                notifyItemRemoved(0);
-            }
-
-        }
-
+       if (headerViewRes != 0) {
+           if (!hasHeader()){
+               this.headerViewRes = headerViewRes;
+               this.hasHeader = true;
+               notifyItemInserted(0);
+           }else{
+               this.headerViewRes = headerViewRes;
+               notifyDataSetChanged();
+           }
+       }
     }
 
     public void setFooterView(int footerViewRes) {
@@ -113,18 +105,27 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
                 this.footerViewRes = footerViewRes;
                 notifyDataSetChanged();
             }
-        } else {
-            if(hasFooter()){
-                this.hasFooter = false;
-                if (hasHeader()){
-                    notifyItemRemoved(mDatas.size()+1);
-                }else{
-                    notifyItemRemoved(mDatas.size());
-                }
+        }
+    }
+
+    public void removeHeaderView(){
+        if(hasHeader){
+            this.hasHeader = false;
+            notifyItemRemoved(0);
+        }
+    }
+
+    public void removeFooterView(){
+        if(hasFooter){
+            this.hasFooter = false;
+            if (hasHeader()){
+                notifyItemRemoved(mDatas.size()+1);
+            }else{
+                notifyItemRemoved(mDatas.size());
             }
         }
-
     }
+
 
     public boolean hasHeader() {
         return hasHeader;
@@ -133,6 +134,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     public boolean hasFooter() {
         return hasFooter;
     }
+
 
     /**只能添加一个headerview**/
     public int getHeaderCount(){

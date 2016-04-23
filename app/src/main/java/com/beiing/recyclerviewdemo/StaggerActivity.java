@@ -34,7 +34,7 @@ public class StaggerActivity extends AppCompatActivity {
             List<Content> list= (List<Content>) msg.obj;
             adapter.getDatas().addAll(list);
             adapter.notifyDataSetChanged();
-            adapter.setFooterView(0);
+            adapter.removeFooterView();
         }
     };
 
