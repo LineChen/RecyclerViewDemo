@@ -1,4 +1,4 @@
-package com.beiing.recyclerview_adapter;
+package com.beiing.recyclerview_adapter.support;
 
 import android.view.View;
 import android.view.ViewGroup;

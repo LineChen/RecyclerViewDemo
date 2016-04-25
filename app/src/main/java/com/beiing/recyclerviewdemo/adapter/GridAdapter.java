@@ -1,13 +1,10 @@
 package com.beiing.recyclerviewdemo.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.beiing.recyclerview_adapter.CommonAdapter;
-import com.beiing.recyclerview_adapter.GridLayoutAdapter;
-import com.beiing.recyclerview_adapter.ItemSupport;
+import com.beiing.recyclerview_adapter.adapter.GridLayoutAdapter;
+import com.beiing.recyclerview_adapter.support.ItemSupport;
 import com.beiing.recyclerview_adapter.ViewHolder;
 import com.beiing.recyclerviewdemo.R;
 import com.beiing.recyclerviewdemo.bean.Content;

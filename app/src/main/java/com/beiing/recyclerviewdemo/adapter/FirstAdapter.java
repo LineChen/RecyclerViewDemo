@@ -3,8 +3,8 @@ package com.beiing.recyclerviewdemo.adapter;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.beiing.recyclerview_adapter.CommonAdapter;
-import com.beiing.recyclerview_adapter.ItemSupport;
+import com.beiing.recyclerview_adapter.adapter.CommonAdapter;
+import com.beiing.recyclerview_adapter.support.ItemSupport;
 import com.beiing.recyclerview_adapter.ViewHolder;
 import com.beiing.recyclerviewdemo.R;
 import com.beiing.recyclerviewdemo.bean.Content;

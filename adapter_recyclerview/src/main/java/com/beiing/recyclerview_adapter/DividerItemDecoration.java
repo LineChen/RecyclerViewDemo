@@ -20,6 +20,7 @@ import android.view.View;
  * <p/>
  * See the license above for details.
  */
+@Deprecated
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{

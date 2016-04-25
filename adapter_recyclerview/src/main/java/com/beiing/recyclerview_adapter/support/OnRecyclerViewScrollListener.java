@@ -1,9 +1,11 @@
-package com.beiing.recyclerview_adapter;
+package com.beiing.recyclerview_adapter.support;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+
+import com.beiing.recyclerview_adapter.support.OnLoadMoreListener;
 
 
 public abstract class OnRecyclerViewScrollListener<T> extends RecyclerView.OnScrollListener implements OnLoadMoreListener {

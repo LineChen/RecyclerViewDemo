@@ -1,12 +1,17 @@
-package com.beiing.recyclerview_adapter;
+package com.beiing.recyclerview_adapter.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import com.beiing.recyclerview_adapter.ViewHolder;
+import com.beiing.recyclerview_adapter.support.ItemSupport;
+import com.beiing.recyclerview_adapter.support.ItemType;
+import com.beiing.recyclerview_adapter.support.OnItemClickListener;
 
 import java.util.List;
 
@@ -16,12 +21,6 @@ import java.util.List;
  * 支持多布局
  */
 public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
-
-    public interface ItemType {
-        int TYPE_HEADER = 0;
-        int TYPE_FOOTER = 1;
-        int TYPE_ONLY_ONE = 2;
-    }
 
     protected Context mContext;
     protected List<T> mDatas;
@@ -42,7 +41,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
         this.mOnItemClickListener = onItemClickListener;
     }
 
-    public CommonAdapter(Context context, List<T> datas, ItemSupport<T> multiItemTypeSupport) {
+    public CommonAdapter(Context context, List<T> datas,@NonNull ItemSupport<T> multiItemTypeSupport) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mDatas = datas;

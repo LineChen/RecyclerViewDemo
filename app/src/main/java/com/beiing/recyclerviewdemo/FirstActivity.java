@@ -4,25 +4,21 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.beiing.recyclerview_adapter.DividerItemDecoration;
-import com.beiing.recyclerview_adapter.OnItemClickListener;
-import com.beiing.recyclerview_adapter.OnRecyclerViewScrollListener;
+import com.beiing.recyclerview_adapter.support.OnItemClickListener;
+import com.beiing.recyclerview_adapter.support.OnRecyclerViewScrollListener;
 import com.beiing.recyclerviewdemo.adapter.FirstAdapter;
 import com.beiing.recyclerviewdemo.bean.Content;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import recyclerview.adapter.RecyclerViewAdapter;
 
 public class FirstActivity extends AppCompatActivity {
 

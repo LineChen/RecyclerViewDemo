@@ -1,11 +1,10 @@
 package com.beiing.recyclerviewdemo.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
-import com.beiing.recyclerview_adapter.ItemSupport;
-import com.beiing.recyclerview_adapter.StaggeredGridLayoutAdapter;
+import com.beiing.recyclerview_adapter.support.ItemSupport;
+import com.beiing.recyclerview_adapter.adapter.StaggeredGridLayoutAdapter;
 import com.beiing.recyclerview_adapter.ViewHolder;
 import com.beiing.recyclerviewdemo.R;
 import com.beiing.recyclerviewdemo.bean.Content;

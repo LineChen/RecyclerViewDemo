@@ -1,9 +1,12 @@
-package com.beiing.recyclerview_adapter;
+package com.beiing.recyclerview_adapter.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ViewGroup;
+
+import com.beiing.recyclerview_adapter.ViewHolder;
+import com.beiing.recyclerview_adapter.support.ItemSupport;
 
 import java.util.List;
 /**
