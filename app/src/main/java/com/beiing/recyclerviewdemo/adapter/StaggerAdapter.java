@@ -20,7 +20,7 @@ public class StaggerAdapter extends StaggeredGridLayoutAdapter<Content>{
     public StaggerAdapter(Context context, List datas) {
         super(context, datas, new ItemSupport() {
             @Override
-            protected int getLayoutId(int itemType) {
+            public int getLayoutId(int itemType) {
                 return R.layout.item_content;
             }
         });

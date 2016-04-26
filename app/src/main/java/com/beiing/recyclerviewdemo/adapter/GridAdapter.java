@@ -21,7 +21,7 @@ public class GridAdapter extends GridLayoutAdapter<Content> {
     public GridAdapter(Context context, List<Content> datas) {
         super(context, datas, new ItemSupport<Content>() {
             @Override
-            protected int getLayoutId(int itemType) {
+            public int getLayoutId(int itemType) {
                 return R.layout.item_content;
             }
         });
